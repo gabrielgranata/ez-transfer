@@ -12,7 +12,7 @@
         android:layout_height="53dp"
         android:layout_marginStart="162dp"
         android:layout_marginEnd="161dp"
-        android:layout_marginBottom="392dp"
+        android:layout_marginBottom="356dp"
         android:onClick="onSendBtnPress"
         android:text="@string/tapMeButton"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,29 +24,47 @@
         android:id="@+id/sendFromAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="77dp"
+        android:layout_marginEnd="82dp"
+        android:layout_marginBottom="22dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="From"
-        tools:layout_editor_absoluteX="116dp"
-        tools:layout_editor_absoluteY="77dp" />
+        app:layout_constraintBottom_toTopOf="@+id/sendToAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/sendToAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="82dp"
+        android:layout_marginBottom="26dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="To"
-        tools:layout_editor_absoluteX="116dp"
-        tools:layout_editor_absoluteY="144dp" />
+        app:layout_constraintBottom_toTopOf="@+id/amount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sendFromAddress" />
 
     <EditText
         android:id="@+id/amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="82dp"
+        android:layout_marginBottom="15dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Amount"
-        tools:layout_editor_absoluteX="116dp"
-        tools:layout_editor_absoluteY="215dp" />
+        app:layout_constraintBottom_toTopOf="@+id/sendButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sendToAddress" />
 </androidx.constraintlayout.widget.ConstraintLayout>
