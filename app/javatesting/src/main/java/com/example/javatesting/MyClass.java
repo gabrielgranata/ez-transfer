@@ -18,19 +18,35 @@ import com.algorand.algosdk.util.Encoder;
 public class MyClass {
 
     public static void main(String args[]) throws Exception {
-        final String ALGOD_API_ADDR = "https://testnet-algorand.api.purestake.io/ps1";
-        final String ALGOD_API_TOKEN = "B3SU4KcVKi94Jap2VXkK83xx38bsv95K5UZm2lab";
+
+        // Algorand Hackathon
+        final String ALGOD_API_ADDR = "http://hackathon.algodev.network:9100";
+        final String ALGOD_API_TOKEN = "ef920e2e7e002953f4b29a8af720efe8e4ecc75ff102b165e0472834b25832c1";
+
+        // your own node
+        // final String ALGOD_API_ADDR = "http://localhost:8080";
+        // final String ALGOD_API_TOKEN = "your ALGOD_API_TOKEN";
+
+        // Purestake
+        // final String ALGOD_API_ADDR =
+        // "https://testnet-algorand.api.purestake.io/ps1";
+        // final String ALGOD_API_TOKEN = "B3SU4KcVKi94Jap2VXkK83xx38bsv95K5UZm2lab";
 
         AlgodClient client = (AlgodClient) new AlgodClient().setBasePath(ALGOD_API_ADDR);
+        // needed for Purestake , else ignored
+        client.addDefaultHeader("X-API-Key", ALGOD_API_TOKEN);
+
         ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
         api_key.setApiKey(ALGOD_API_TOKEN);
         AlgodApi algodApiInstance = new AlgodApi(client);
 
-        //Using a backup mnemonic to recover the source account to send tokens from
-        final String SRC_ACCOUNT = "weird uncle argue later install proof canvas rabbit first own sorry anxiety gadget fiction devote planet clog smooth vanish element air couple argue ability inner";
-        final String DEST_ADDR = "QACLCWJOTYTZSOJ5KUDYQC35TVV5LXHUY35SYDGH3P6FWIMXN26A4UH5KU";
-        int AMOUNT = 5000000;
-
+        // Using a backup mnemonic to recover the source account to send tokens from
+        final String SRC_ACCOUNT = "carry meat frost clever casual winner elite range slam track future fragile unusual vapor club media come senior vapor dish square action race absorb olive";
+        final String DEST_ADDR = "35HNOZFKPGSQ4BMUQAQMMOOKYD5DIIST6NEV5VCIKI4O5DATFQBY4NJUYY";
+        // if an account drops below the minimum where should the remainding funds be
+        // sent
+        final String REM_ADDR = "KV2XGKMXGYJ6PWYQA5374BYIQBL3ONRMSIARPCFCJEAMAHQEVYPB7PL3KU";
+        // final String REM_ADDR = "";
 
         // get last round and suggested tx fee
         BigInteger suggestedFeePerByte = BigInteger.valueOf(1);
@@ -43,8 +59,10 @@ public class MyClass {
             suggestedFeePerByte = params.getFee();
             firstRound = params.getLastRound();
             System.out.println("Suggested Fee: " + suggestedFeePerByte);
-            // genesisID and genesisHash are optional on testnet, but will be mandatory on release
-            // to ensure that transactions are valid for only a single chain. GenesisHash is preferred.
+            // genesisID and genesisHash are optional on testnet, but will be mandatory on
+            // release
+            // to ensure that transactions are valid for only a single chain. GenesisHash is
+            // preferred.
             // genesisID will be deprecated soon.
             genId = params.getGenesisID();
             genesisHash = new Digest(params.getGenesishashb64());
@@ -59,14 +77,20 @@ public class MyClass {
 
         // Instantiate the transaction
         Account src = new Account(SRC_ACCOUNT);
-        BigInteger amount = BigInteger.valueOf(AMOUNT);
+        BigInteger amount = BigInteger.valueOf(1000);
         BigInteger lastRound = firstRound.add(BigInteger.valueOf(1000)); // 1000 is the max tx window
-        //Setup Transaction
-        Transaction tx = new Transaction(src.getAddress(),  BigInteger.valueOf(1000), firstRound, lastRound, notes, amount, new Address(DEST_ADDR), genId, genesisHash);
+
+        // Setup Transaction
+        // Use a fee of 0 as we will set the fee per
+        // byte when we sign the tx and overwrite it
+        //
+
+        Transaction tx = new Transaction(src.getAddress(), BigInteger.valueOf(1000000), firstRound, lastRound, notes, genId,
+                genesisHash, amount, new Address(DEST_ADDR), null);
 
         // Sign the Transaction
-        SignedTransaction signedTx = src.signTransaction(tx);
-
+        SignedTransaction signedTx = src.signTransactionWithFeePerByte(tx, suggestedFeePerByte);
+        // how to sign offline
         // send the transaction to the network
         try {
             // Msgpack encode the signed transaction
@@ -79,24 +103,27 @@ public class MyClass {
         }
 
         // wait for transaction to be confirmed
-        while(true) {
+        while (true) {
             try {
-                //Check the pending tranactions
-                com.algorand.algosdk.algod.client.model.Transaction b3 = algodApiInstance.pendingTransactionInformation(signedTx.transactionID);
+                // Check the pending tranactions
+                com.algorand.algosdk.algod.client.model.Transaction b3 = algodApiInstance
+                        .pendingTransactionInformation(signedTx.transactionID);
                 if (b3.getRound() != null && b3.getRound().longValue() > 0) {
-                    System.out.println("Transaction " + b3.getTx() + " confirmed in round " + b3.getRound().longValue());
+                    System.out
+                            .println("Transaction " + b3.getTx() + " confirmed in round " + b3.getRound().longValue());
                     break;
                 } else {
                     System.out.println("Waiting for confirmation... (pool error, if any:)" + b3.getPoolerror());
                 }
             } catch (ApiException e) {
                 System.err.println("Exception when calling algod#pendingTxInformation: " + e.getMessage());
-                break;
             }
         }
-        //Read the transaction
+
+        // Read the transaction
         try {
-            com.algorand.algosdk.algod.client.model.Transaction rtx = algodApiInstance.transactionInformation(DEST_ADDR, signedTx.transactionID);
+            com.algorand.algosdk.algod.client.model.Transaction rtx = algodApiInstance.transactionInformation(DEST_ADDR,
+                    signedTx.transactionID);
             System.out.println("Transaction information (with notes): " + rtx.toString());
             System.out.println("Decoded notes: [" + new String(rtx.getNoteb64()) + "]");
         } catch (ApiException e) {
