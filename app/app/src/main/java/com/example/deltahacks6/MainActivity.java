@@ -1,6 +1,8 @@
 package com.example.deltahacks6;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import android.os.Bundle;
 import android.view.View;
@@ -20,13 +22,20 @@ import com.algorand.algosdk.transaction.SignedTransaction;
 import com.algorand.algosdk.transaction.Transaction;
 import com.algorand.algosdk.util.Encoder;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
     TextView fromTextView;
     TextView toTextView;
     TextView amountTextView;
+    private String fromAddress;
+    private String toAddress;
+    private int trueAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,20 +47,40 @@ public class MainActivity extends AppCompatActivity {
         amountTextView = findViewById(R.id.amount);
     }
 
-    public void onSendBtnPress(View v){
+    public void onSendBtnPress(View v) throws Exception{
 
-        String fromAddress = fromTextView.getText().toString();
-        String toAddress = toTextView.getText().toString();
-        int amount =  Integer.parseInt(amountTextView.getText().toString());
-        try{
-            makeTransaction(fromAddress, toAddress, amount);
-        }catch (Exception e){
-            System.err.println("Error");
-        }
+        fromAddress = fromTextView.getText().toString();
+        toAddress = toTextView.getText().toString();
+        trueAmount = Integer.parseInt(amountTextView.getText().toString());
 
+        executorService.submit(transactionRunnable);
+
+        result.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+            }
+        });
     }
 
-    public void makeTransaction(String SRC_ACCOUNT, String DEST_ADDR, int AMOUNT) throws Exception{
+    public ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    MutableLiveData<String> result = new MutableLiveData<>();
+
+    Runnable transactionRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                makeTransaction(fromAddress, toAddress, trueAmount);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    public void makeTransaction(String SRC_ACCOUNT, String DEST_ADDR, int AMOUNT) throws IOException, GeneralSecurityException {
 
         // Algorand Hackathon
         final String ALGOD_API_ADDR = "http://hackathon.algodev.network:9100";
@@ -161,5 +190,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (ApiException e) {
             System.err.println("Exception when calling algod#transactionInformation: " + e.getCode());
         }
+
+        result.postValue("result");
     }
 }
