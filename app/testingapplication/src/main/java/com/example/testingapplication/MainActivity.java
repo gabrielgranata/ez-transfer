@@ -10,8 +10,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.*;
 
-import com.algorand.algosdk.account.Account;
-import com.algorand.algosdk.crypto.Address;
 import com.squareup.okhttp.HttpUrl;
 
 import java.io.Console;
@@ -27,9 +25,9 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
-    String toAddress;
-    String fromAddress;
-    int amount;
+    String toAddress = "hello";
+    String fromAddress = "goodbye";
+    int amount = 0;
 
     String TAG = "Testing";
 
@@ -66,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     public void makeRequest() {
         try {
             System.out.println("ass");
-            URL url = new URL("http://10.0.2.2:3000/?param1="+ fromAddress + "&param2=" + toAddress + "&param3=" + amount);
+            URL url = new URL("http://10.0.2.2:3000/?fromAddress="+ fromAddress + "&toAddress=" + toAddress + "&amount=" + amount);
             try {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
@@ -106,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
 //                        }
 //                    }
 //                });
-        Account algorandAccount = new Account();
-        String mnemonic = algorandAccount.toMnemonic();
-        String address = algorandAccount.getAddress().toString();
+//        Account algorandAccount = new Account();
+//        String mnemonic = algorandAccount.toMnemonic();
+//        String address = algorandAccount.getAddress().toString();
     }
 }

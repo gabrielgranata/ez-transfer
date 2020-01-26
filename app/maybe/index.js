@@ -20,19 +20,17 @@ const firebaseConfig = {
 init();
 
 app.get('/', async function (req, res) {
-    console.log("Hello World");
 
-    let email;
-    let password;
 
-    await createAccount(email, password);
+    await signin(req.query.email, req.query.password);
 })
+
 
 app.post('/transaction', async function (req, res) {
 
-    let from;
-    let to;
-    let amount;
+    let from = req.query.fromAddress;
+    let to = req.query.toAddress;
+    let amount = req.query.amount;
     await makeTransaction(from, to, amount);
 })
 
@@ -44,7 +42,8 @@ function init() {
 
 }
 
-async function createAccount() {
+
+async function signin(email, password) {
     let account = algosdk.generateAccount();
     let address = account.addr;
     let sk = account.sk;
@@ -53,10 +52,7 @@ async function createAccount() {
     console.log(address);
     console.log(mnemonic);
 
-    let email = 'gabriel.granata@hotmail.com';
-    let password = 'password';
-
-    await auth.createUserWithEmailAndPassword(email, password).catch(function (error) {
+    await auth.signInWithEmailAndPassword(email, password).catch(function (error) {
         if (error) {
             console.log(error);
         } else {
