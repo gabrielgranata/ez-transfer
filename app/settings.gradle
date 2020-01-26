@@ -1,2 +1,2 @@
-include ':app', ':javatesting'
+include ':app', ':javatesting', ':testingapplication'
 rootProject.name='deltahacks6'
