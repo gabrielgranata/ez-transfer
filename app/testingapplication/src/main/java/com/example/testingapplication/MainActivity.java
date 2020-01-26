@@ -36,10 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             Account account = new Account();
+            System.out.println(account.getAddress());
+            System.out.println(account.toMnemonic());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             System.err.println("Errorrrrrrr");
         }
+
 //        try {
 //            createAccount();
 //        } catch (IOException e) {
