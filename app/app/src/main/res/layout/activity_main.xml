@@ -7,105 +7,78 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/transferHeader"
-        android:layout_width="212dp"
-        android:layout_height="55dp"
+        android:id="@+id/loginHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/appName"
-        app:layout_constraintBottom_toTopOf="@+id/sendFromAddress"
+        android:text="@string/loginHeader"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/amount"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/amountHint"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.428"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="501dp" />
-
-    <EditText
-        android:id="@+id/sendFromAddress"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/sendFromAddressHint"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="277dp" />
-
-    <EditText
-        android:id="@+id/sendToAddress"
-        android:layout_width="0dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/sendToAddressHint"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="369dp" />
-
-    <TextView
-        android:id="@+id/sendToText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/sendToText"
-        app:layout_constraintBottom_toTopOf="@+id/sendToAddress"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/transferFromText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/sendFromText"
-        app:layout_constraintBottom_toTopOf="@+id/sendFromAddress"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/amountText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/amountText"
-        app:layout_constraintBottom_toTopOf="@+id/amount"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <Button
-        android:id="@+id/sendButton"
+        android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="80dp"
-        android:onClick="onSendBtnPress"
-        android:text="Send"
+        android:layout_marginBottom="16dp"
+        android:text="@string/loginButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amount" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordHint"
+        app:layout_constraintVertical_bias="0.565" />
 
+    <EditText
+        android:id="@+id/passwordHint"
+        android:layout_width="265dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="16dp"
+        android:ems="10"
+        android:hint="@string/passwordHint"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailHint"
+        app:layout_constraintVertical_bias="0.136" />
+
+    <TextView
+        android:id="@+id/emailText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/emailText"
+        app:layout_constraintBottom_toTopOf="@+id/passwordText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.914" />
+
+    <EditText
+        android:id="@+id/emailHint"
+        android:layout_width="265dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="28dp"
+        android:ems="10"
+        android:hint="@string/emailHint"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="478dp" />
+
+    <TextView
+        android:id="@+id/passwordText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:text="@string/passwordText"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="565dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
