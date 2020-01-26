@@ -21,17 +21,25 @@ init();
 
 app.get('/', async function (req, res) {
 
-
-    await signin(req.query.email, req.query.password);
+    await signin(req.query.login, req.query.password);
 })
 
 
-app.post('/transaction', async function (req, res) {
+app.get('/transaction', async function (req, res) {
 
-    let from = req.query.fromAddress;
+    let currentUser = auth.currentUser;
+    let uid = currentUser.uid;
+
+    let userRef = await db.collection('users').doc(uid);
+    let getDoc = await userRef.get()
+                    .then(doc => {
+                        let data = doc.data();
+                        mnemonic = data.mnemonic;
+                    })
+
     let to = req.query.toAddress;
     let amount = req.query.amount;
-    await makeTransaction(from, to, amount);
+    await makeTransaction(mnemonic, to, amount);
 })
 
 function init() {
@@ -69,6 +77,8 @@ async function signin(email, password) {
         email: email,
         address: address,
         mnemonic: mnemonic
+    }).catch(function (error) {
+        console.log(error);
     });
 
 
@@ -84,6 +94,7 @@ async function makeTransaction(from, to, amount) {
     var mnemonic = "you mnemonic string";
     var recoveredAccount = algosdk.mnemonicToSecretKey(from);
 
+    amount = parseInt(amount)
     //instantiate the algod wrapper
     let algodclient = new algosdk.Algod(atoken, aserver, aport);
     (async () => {

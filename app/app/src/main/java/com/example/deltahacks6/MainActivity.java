@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -15,6 +16,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
+
+    TextView loginView;
+    TextView passwordView;
 
     String fromAddress;
     String toAddress;
@@ -28,37 +32,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        executorService.execute(requestRunnable);
-    }
-
-    public void makeRequest() {
-        try {
-            System.out.println("ass");
-            URL url = new URL("http://10.0.2.2:3000/?param1="+ fromAddress + "&param2=" + toAddress + "&param3=" + amount);
-            try {
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                System.out.println(connection.getResponseCode());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (MalformedURLException e) {
-            System.out.println("Invalid host");
-        }
+        loginView = findViewById(R.id.emailHint);
+        passwordView = findViewById(R.id.passwordHint);
 
     }
-    public ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    Runnable requestRunnable = new Runnable() {
-        @Override
-        public void run() {
-            makeRequest();
-        }
-    };
+
 
     public void makeRequest2() {
         try {
-            URL url = new URL("http://10.0.2.2:3000/?param1="+ login + "&param2=" + password);
+            URL url = new URL("http://10.0.2.2:3000/?login="+ login + "&password=" + password);
             try {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
@@ -74,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void onLoginButtonPress(View v){
         e2.execute(r2);
+
+        login = loginView.getText().toString();
+        password = passwordView.getText().toString();
 
         startActivity(new Intent(MainActivity.this, TransferActivity.class));
     }

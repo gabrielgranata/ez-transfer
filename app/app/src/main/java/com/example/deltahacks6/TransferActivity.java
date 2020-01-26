@@ -25,6 +25,9 @@ import com.algorand.algosdk.util.Encoder;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -54,138 +57,34 @@ public class TransferActivity extends AppCompatActivity {
         toAddress = toTextView.getText().toString();
         trueAmount = Integer.parseInt(amountTextView.getText().toString());
 
-        executorService.submit(transactionRunnable);
+        executorService.submit(requestRunnable);
 
-        result.observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-            }
-        });
     }
 
-    public ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    MutableLiveData<String> result = new MutableLiveData<>();
-
-    Runnable transactionRunnable = new Runnable() {
-        @Override
-        public void run() {
+    public void makeRequest() {
+        try {
+            System.out.println("ass");
+            URL url = new URL("http://10.0.2.2:3000/transaction?fromAddress="+ fromAddress + "&toAddress=" + toAddress + "&amount=" + trueAmount);
             try {
-                makeTransaction(fromAddress, toAddress, trueAmount);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                System.out.println(connection.getResponseCode());
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (GeneralSecurityException e) {
-                e.printStackTrace();
             }
+        } catch (MalformedURLException e) {
+            System.out.println("Invalid host");
+        }
+
+    }
+    public ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    Runnable requestRunnable = new Runnable() {
+        @Override
+        public void run() {
+            makeRequest();
         }
     };
-
-    public void makeTransaction(String fromAccount, String toAccount, int trueAmount) throws IOException, GeneralSecurityException {
-
-        // Algorand Hackathon
-        final String ALGOD_API_ADDR = "http://hackathon.algodev.network:9100";
-        final String ALGOD_API_TOKEN = "ef920e2e7e002953f4b29a8af720efe8e4ecc75ff102b165e0472834b25832c1";
-
-        // your own node
-        // final String ALGOD_API_ADDR = "http://localhost:8080";
-        // final String ALGOD_API_TOKEN = "your ALGOD_API_TOKEN";
-
-        // Purestake
-        // final String ALGOD_API_ADDR =
-        // "https://testnet-algorand.api.purestake.io/ps1";
-        // final String ALGOD_API_TOKEN = "B3SU4KcVKi94Jap2VXkK83xx38bsv95K5UZm2lab";
-
-        AlgodClient client = (AlgodClient) new AlgodClient().setBasePath(ALGOD_API_ADDR);
-        // needed for Purestake , else ignored
-        client.addDefaultHeader("X-API-Key", ALGOD_API_TOKEN);
-
-        ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
-        api_key.setApiKey(ALGOD_API_TOKEN);
-        AlgodApi algodApiInstance = new AlgodApi(client);
-
-        // Using a backup mnemonic to recover the source account to send tokens from
-        // get last round and suggested tx fee
-        BigInteger suggestedFeePerByte = BigInteger.valueOf(1);
-        BigInteger firstRound = BigInteger.valueOf(301);
-        String genId = null;
-        Digest genesisHash = null;
-        try {
-            // Get suggested parameters from the node
-            TransactionParams params = algodApiInstance.transactionParams();
-            suggestedFeePerByte = params.getFee();
-            firstRound = params.getLastRound();
-            System.out.println("Suggested Fee: " + suggestedFeePerByte);
-            // genesisID and genesisHash are optional on testnet, but will be mandatory on
-            // release
-            // to ensure that transactions are valid for only a single chain. GenesisHash is
-            // preferred.
-            // genesisID will be deprecated soon.
-            genId = params.getGenesisID();
-            genesisHash = new Digest(params.getGenesishashb64());
-
-        } catch (ApiException e) {
-            System.err.println("Exception when calling algod#transactionParams");
-            e.printStackTrace();
-        }
-
-        // add some notes to the transaction
-        byte[] notes = "These are some notes encoded in some way!".getBytes();
-
-        // Instantiate the transaction
-        Account src = new Account(fromAccount);
-        BigInteger amount = BigInteger.valueOf(trueAmount);
-        BigInteger lastRound = firstRound.add(BigInteger.valueOf(1000)); // 1000 is the max tx window
-
-        // Setup Transaction
-        // Use a fee of 0 as we will set the fee per
-        // byte when we sign the tx and overwrite it
-        //
-
-        Transaction tx = new Transaction(src.getAddress(), BigInteger.valueOf(0), firstRound, lastRound, notes, genId,
-                genesisHash, amount, new Address(toAccount), null);
-
-        // Sign the Transaction
-        SignedTransaction signedTx = src.signTransactionWithFeePerByte(tx, suggestedFeePerByte);
-        // how to sign offline
-        // send the transaction to the network
-        try {
-            // Msgpack encode the signed transaction
-            byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTx);
-            TransactionID id = algodApiInstance.rawTransaction(encodedTxBytes);
-            System.out.println("Successfully sent tx with id: " + id);
-        } catch (ApiException e) {
-            // This is generally expected, but should give us an informative error message.
-            System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
-        }
-
-        // wait for transaction to be confirmed
-        while (true) {
-            try {
-                // Check the pending tranactions
-                com.algorand.algosdk.algod.client.model.Transaction b3 = algodApiInstance
-                        .pendingTransactionInformation(signedTx.transactionID);
-                if (b3.getRound() != null && b3.getRound().longValue() > 0) {
-                    System.out
-                            .println("Transaction " + b3.getTx() + " confirmed in round " + b3.getRound().longValue());
-                    break;
-                } else {
-                    System.out.println("Waiting for confirmation... (pool error, if any:)" + b3.getPoolerror());
-                }
-            } catch (ApiException e) {
-                System.err.println("Exception when calling algod#pendingTxInformation: " + e.getMessage());
-            }
-        }
-
-        // Read the transaction
-        try {
-            com.algorand.algosdk.algod.client.model.Transaction rtx = algodApiInstance.transactionInformation(toAccount,
-                    signedTx.transactionID);
-            System.out.println("Transaction information (with notes): " + rtx.toString());
-            System.out.println("Decoded notes: [" + new String(rtx.getNoteb64()) + "]");
-        } catch (ApiException e) {
-            System.err.println("Exception when calling algod#transactionInformation: " + e.getCode());
-        }
-    }
 }
 
