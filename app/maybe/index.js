@@ -17,6 +17,8 @@ const firebaseConfig = {
     appId: "1:713129899445:web:15a11ae4d8122620c995fc"
 };
 
+init();
+
 app.get('/', async function (req, res) {
     console.log("Hello World");
 
