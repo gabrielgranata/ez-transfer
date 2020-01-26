@@ -12,11 +12,17 @@ import com.google.firebase.auth.*;
 
 import com.algorand.algosdk.account.Account;
 import com.algorand.algosdk.crypto.Address;
+import com.squareup.okhttp.HttpUrl;
 
+import java.io.Console;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,14 +40,15 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("Creating Account");
 
-        try {
-            Account account = new Account();
-            System.out.println(account.getAddress());
-            System.out.println(account.toMnemonic());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            System.err.println("Errorrrrrrr");
-        }
+        executorService.execute(requestRunnable);
+//        try {
+//            Account account = new Account();
+//            System.out.println(account.getAddress());
+//            System.out.println(account.toMnemonic());
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//            System.err.println("Errorrrrrrr");
+//        }
 
 //        try {
 //            createAccount();
@@ -51,6 +58,31 @@ public class MainActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
     }
+
+    public void makeRequest() {
+        try {
+            URL url = new URL("https://127.0.0.1:3000/");
+            try {
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                System.out.println(connection.getResponseCode());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (MalformedURLException e) {
+            System.out.println("Invalid host");
+        }
+
+    }
+
+    public ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    Runnable requestRunnable = new Runnable() {
+        @Override
+        public void run() {
+            makeRequest();
+        }
+    };
 
     public void createAccount() throws IOException, GeneralSecurityException {
 
