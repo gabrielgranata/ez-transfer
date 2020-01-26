@@ -1,5 +1,11 @@
 <resources>
-    <string name="app_name">deltahacks6</string>
-    <string name="tapMeButton">SEND</string>
+    <string name="appName">Ez-Transfer</string>
+    <string name="sendFromAddressHint">Wallet Address</string>
+    <string name="sendToAddressHint">Wallet Address</string>
+    <string name="sendFromText">Send From:</string>
+    <string name="sendToText">Send To:</string>
+    <string name="amountText">Amount:</string>
+    <string name="amountHint">Amount</string>
+
 
 </resources>

@@ -6,65 +6,100 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/sendButton"
-        android:layout_width="85dp"
-        android:layout_height="53dp"
-        android:layout_marginStart="162dp"
-        android:layout_marginEnd="161dp"
-        android:layout_marginBottom="356dp"
-        android:onClick="onSendBtnPress"
-        android:text="@string/tapMeButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.333"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/sendFromAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="116dp"
-        android:layout_marginTop="77dp"
-        android:layout_marginEnd="82dp"
-        android:layout_marginBottom="22dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="From"
-        app:layout_constraintBottom_toTopOf="@+id/sendToAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/sendToAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="116dp"
-        android:layout_marginTop="22dp"
-        android:layout_marginEnd="82dp"
-        android:layout_marginBottom="26dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="To"
-        app:layout_constraintBottom_toTopOf="@+id/amount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendFromAddress" />
+    <TextView
+        android:id="@+id/transferHeader"
+        android:layout_width="212dp"
+        android:layout_height="55dp"
+        android:text="@string/appName"
+        tools:layout_editor_absoluteX="90dp"
+        tools:layout_editor_absoluteY="117dp" />
 
     <EditText
         android:id="@+id/amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="116dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="82dp"
-        android:layout_marginBottom="15dp"
+        android:layout_width="355dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Amount"
-        app:layout_constraintBottom_toTopOf="@+id/sendButton"
+        android:text="@string/amountHint"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendToAddress" />
+        tools:layout_editor_absoluteY="501dp" />
+
+    <EditText
+        android:id="@+id/sendFromAddress"
+        android:layout_width="358dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/sendFromAddressHint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="277dp" />
+
+    <EditText
+        android:id="@+id/sendToAddress"
+        android:layout_width="356dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/sendToAddressHint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="369dp" />
+
+    <TextView
+        android:id="@+id/sendToText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/sendToText"
+        app:layout_constraintBottom_toTopOf="@+id/sendToAddress"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/transferFromText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/sendFromText"
+        app:layout_constraintBottom_toTopOf="@+id/sendFromAddress"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/amountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/amountText"
+        app:layout_constraintBottom_toTopOf="@+id/amount"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="80dp"
+        android:onClick="onSendBtnPress"
+        android:text="Send"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amount" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
