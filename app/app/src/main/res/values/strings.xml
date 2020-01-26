@@ -1,12 +1,18 @@
 <resources>
     <string name="app_name">deltahacks6</string>
     <string name="appName">Ez-Hacks</string>
-    <string name="sendFromAddressHint">Wallet Address</string>
-    <string name="sendToAddressHint">Wallet Address</string>
+    <string name="sendFromAddressHint">weird uncle argue later install proof canvas rabbit first own sorry anxiety gadget fiction devote planet clog smooth vanish element air couple argue ability inner</string>
+    <string name="sendToAddressHint">QACLCWJOTYTZSOJ5KUDYQC35TVV5LXHUY35SYDGH3P6FWIMXN26A4UH5KU</string>
     <string name="sendFromText">Send From:</string>
     <string name="sendToText">Send To:</string>
     <string name="amountText">Amount:</string>
-    <string name="amountHint">Amount</string>
+    <string name="amountHint">5000000</string>
+    <string name="loginButton">Login</string>
+    <string name="passwordText">Password:</string>
+    <string name="emailText">Email:</string>
+    <string name="loginHeader">Ez-Transfer</string>
+    <string name="emailHint">deltahacksrocks@mail.ca</string>
+    <string name="passwordHint">verysecret</string>
 
 
 </resources>

@@ -10,13 +10,19 @@
         android:id="@+id/transferHeader"
         android:layout_width="212dp"
         android:layout_height="55dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/appName"
-        tools:layout_editor_absoluteX="90dp"
-        tools:layout_editor_absoluteY="117dp" />
+        app:layout_constraintBottom_toTopOf="@+id/sendFromAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/amount"
-        android:layout_width="355dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -30,7 +36,7 @@
 
     <EditText
         android:id="@+id/sendFromAddress"
-        android:layout_width="358dp"
+        android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -44,7 +50,7 @@
 
     <EditText
         android:id="@+id/sendToAddress"
-        android:layout_width="356dp"
+        android:layout_width="0dp"
         android:layout_height="49dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -58,7 +64,7 @@
 
     <TextView
         android:id="@+id/sendToText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="22dp"
         android:layout_marginBottom="8dp"
@@ -68,7 +74,7 @@
 
     <TextView
         android:id="@+id/transferFromText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="22dp"
         android:layout_marginBottom="8dp"
@@ -78,10 +84,10 @@
 
     <TextView
         android:id="@+id/amountText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="22dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/amountText"
         app:layout_constraintBottom_toTopOf="@+id/amount"
         app:layout_constraintStart_toStartOf="parent" />
