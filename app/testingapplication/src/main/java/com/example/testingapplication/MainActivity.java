@@ -27,6 +27,10 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
+    String toAddress;
+    String fromAddress;
+    int amount;
+
     String TAG = "Testing";
 
     FirebaseAuth auth;
@@ -61,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void makeRequest() {
         try {
-            URL url = new URL("https://127.0.0.1:3000/");
+            System.out.println("ass");
+            URL url = new URL("http://10.0.2.2:3000/?param1="+ fromAddress + "&param2=" + toAddress + "&param3=" + amount);
             try {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");

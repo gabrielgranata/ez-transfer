@@ -22,3 +22,5 @@ function createAccount() {
 
     
 }
+
+app.listen(3000);
