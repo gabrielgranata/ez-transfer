@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public void makeTransaction(String fromAccount, String toAccount, int trueAmount) throws IOException, GeneralSecurityException {
+    public void makeTransaction(String SRC_ACCOUNT, String DEST_ADDR, int AMOUNT) throws IOException, GeneralSecurityException {
 
         // Algorand Hackathon
         final String ALGOD_API_ADDR = "http://hackathon.algodev.network:9100";
@@ -104,6 +104,11 @@ public class MainActivity extends AppCompatActivity {
         AlgodApi algodApiInstance = new AlgodApi(client);
 
         // Using a backup mnemonic to recover the source account to send tokens from
+        // if an account drops below the minimum where should the remainding funds be
+        // sent
+        final String REM_ADDR = "KV2XGKMXGYJ6PWYQA5374BYIQBL3ONRMSIARPCFCJEAMAHQEVYPB7PL3KU";
+        // final String REM_ADDR = "";
+
         // get last round and suggested tx fee
         BigInteger suggestedFeePerByte = BigInteger.valueOf(1);
         BigInteger firstRound = BigInteger.valueOf(301);
@@ -132,8 +137,8 @@ public class MainActivity extends AppCompatActivity {
         byte[] notes = "These are some notes encoded in some way!".getBytes();
 
         // Instantiate the transaction
-        Account src = new Account(fromAccount);
-        BigInteger amount = BigInteger.valueOf(trueAmount);
+        Account src = new Account(SRC_ACCOUNT);
+        BigInteger amount = BigInteger.valueOf(AMOUNT);
         BigInteger lastRound = firstRound.add(BigInteger.valueOf(1000)); // 1000 is the max tx window
 
         // Setup Transaction
@@ -141,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
         // byte when we sign the tx and overwrite it
         //
 
-        Transaction tx = new Transaction(src.getAddress(), BigInteger.valueOf(0), firstRound, lastRound, notes, genId,
-                genesisHash, amount, new Address(toAccount), null);
+        Transaction tx = new Transaction(src.getAddress(), BigInteger.valueOf(1000000), firstRound, lastRound, notes, genId,
+                genesisHash, amount, new Address(DEST_ADDR), null);
 
         // Sign the Transaction
         SignedTransaction signedTx = src.signTransactionWithFeePerByte(tx, suggestedFeePerByte);
@@ -178,12 +183,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Read the transaction
         try {
-            com.algorand.algosdk.algod.client.model.Transaction rtx = algodApiInstance.transactionInformation(toAccount,
+            com.algorand.algosdk.algod.client.model.Transaction rtx = algodApiInstance.transactionInformation(DEST_ADDR,
                     signedTx.transactionID);
             System.out.println("Transaction information (with notes): " + rtx.toString());
             System.out.println("Decoded notes: [" + new String(rtx.getNoteb64()) + "]");
         } catch (ApiException e) {
             System.err.println("Exception when calling algod#transactionInformation: " + e.getCode());
         }
+
+        result.postValue("result");
     }
 }
